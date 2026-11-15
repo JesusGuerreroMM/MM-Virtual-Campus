@@ -256,7 +256,7 @@
             </button>
 
             <!-- Diagnóstico de Dominio para Firebase Authentication -->
-            <div id="auth-domain-diagnostic-box" class="hidden p-3.5 rounded-2xl bg-red-50 border border-red-200 text-left space-y-2">
+            <div id="auth-domain-diagnostic-box" class="hidden p-3.5 rounded-2xl bg-red-50 border border-red-200 text-left space-y-2.5">
               <div class="flex items-start gap-2">
                 <i class="fa-solid fa-triangle-exclamation text-red-600 mt-0.5 text-sm shrink-0"></i>
                 <div class="space-y-1 flex-1 min-w-0">
@@ -272,6 +272,25 @@
                   class="px-2.5 py-1 rounded-lg bg-marymount-navy hover:bg-marymount-blue text-white text-[10px] font-bold shrink-0 transition"
                 >
                   <i class="fa-solid fa-copy mr-1"></i>Copiar dominio
+                </button>
+              </div>
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-0.5">
+                <a
+                  href="https://console.firebase.google.com/project/mm-virtual-campus-388c5/authentication/settings"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white hover:bg-red-100 text-red-900 border border-red-200 text-[10px] font-extrabold transition"
+                >
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                  <span>Abrir Authorized Domains en Firebase</span>
+                </a>
+                <button
+                  type="button"
+                  onclick="window.MMApp.enterInteractivePreview('teacher_geometry')"
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-marymount-gold text-marymount-navy hover:bg-amber-300 text-[10px] font-extrabold transition"
+                >
+                  <i class="fa-solid fa-play"></i>
+                  <span>Explorar Vista Previa Ahora</span>
                 </button>
               </div>
             </div>
@@ -2087,9 +2106,15 @@
       const hostname = window.location.hostname || "(archivo local file:// sin dominio)";
       hostEl.textContent = hostname;
 
+      const isEphemeralPreview =
+        hostname.endsWith(".scf.usercontent.goog") || hostname.endsWith(".googleusercontent.com");
+
       if (protocol === "file:") {
         msgEl.innerHTML =
           `Estás abriendo <code>index.html</code> directamente como archivo local (<code>file://</code>). Firebase Authentication requiere ejecutarse desde un servidor HTTP/HTTPS (por ejemplo <code>localhost</code> o Firebase Hosting) cuyo dominio esté registrado en <strong>Authorized domains</strong>.`;
+      } else if (isEphemeralPreview) {
+        msgEl.innerHTML =
+          `Estás ejecutando la app dentro de una <strong>vista previa temporal</strong> (<code>${escapeHTML(hostname)}</code>). Copia este dominio y agrégalo en <strong>Firebase Console &gt; Authentication &gt; Settings &gt; Authorized domains</strong>, o despliega en <code>mm-virtual-campus-388c5.web.app</code>.`;
       } else {
         msgEl.innerHTML =
           customMessage ||
@@ -5286,7 +5311,18 @@
             switchView("view-unauthorized");
           }
         } catch (err) {
-          showToast(`Error sincronizando sesión: ${err.message}`, "error");
+          const isMissingFunctions =
+            err?.code === "functions/not-found" ||
+            err?.code === "functions/unavailable" ||
+            String(err?.message || "").includes("syncUserSession");
+          if (isMissingFunctions) {
+            showToast(
+              "Autenticación Google exitosa, pero falta desplegar Cloud Functions (ejecuta: firebase deploy --only functions,firestore:rules,storage,hosting).",
+              "warning"
+            );
+          } else {
+            showToast(`Error sincronizando sesión: ${err.message}`, "error");
+          }
           switchView("view-login");
         }
       });
