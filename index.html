@@ -92,7 +92,7 @@
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-900">
 
   <!-- CONTENEDOR DE NOTIFICACIONES EMERGENTES COMPACTAS -->
-  <div id="toast-container" class="fixed bottom-2 left-2 z-[100] flex flex-col gap-1 pointer-events-none max-w-[220px] sm:max-w-[240px]"></div>
+  <div id="toast-container" class="fixed bottom-2 left-2 z-[100] flex flex-col gap-1 pointer-events-none max-w-[230px] sm:max-w-[260px]"></div>
 
   <!-- BARRA SUPERIOR INSTITUCIONAL (VISIBLE AL INICIAR SESIÓN) -->
   <header id="app-topbar" class="hidden sticky top-0 z-40 bg-marymount-navy text-white border-b border-sky-900/60 shadow-md">
@@ -292,7 +292,13 @@
         <i class="fa-solid fa-shield-halved text-sky-600"></i>
         <span>Admin</span>
       </button>
-      <span class="text-[11px] text-slate-400 font-medium">MM Virtual Campus</span>
+      <div class="flex items-center gap-2">
+        <span id="login-cloud-status" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/80 border border-slate-200 text-[11px] font-semibold text-slate-500">
+          <span id="login-cloud-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span id="login-cloud-text">Conectando nube...</span>
+        </span>
+        <span class="text-[11px] text-slate-400 font-medium hidden sm:inline">MM Virtual Campus</span>
+      </div>
     </div>
   </main>
 
@@ -930,8 +936,8 @@
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-marymount-navy border border-sky-200 font-bold inline-flex items-center gap-1.5">
                   <i class="fa-solid fa-paperclip"></i>
-                  <span>Adjuntar PDF o Imagen</span>
-                  <input id="ann-file-input" type="file" multiple accept=".pdf,image/jpeg,image/png,image/webp" onchange="window.MMApp.previewAnnouncementFiles()" class="hidden" />
+                  <span>Adjuntar PDF o Documento</span>
+                  <input id="ann-file-input" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,image/*" onchange="window.MMApp.previewAnnouncementFiles()" class="hidden" />
                 </label>
                 <div id="ann-files-preview" class="flex flex-wrap gap-1.5"></div>
                 <button type="submit" class="px-5 py-2.5 rounded-xl bg-marymount-navy hover:bg-marymount-blue text-white font-extrabold transition ml-auto">
@@ -974,7 +980,7 @@
           <div class="bg-white rounded-3xl border border-slate-200 p-4 shadow-xs flex flex-wrap items-center justify-between gap-2">
             <div>
               <h3 class="font-extrabold text-sm text-marymount-navy">Actividades Evaluativas y Talleres</h3>
-              <p class="text-xs text-slate-500">Gestiona entregas, enlaces, documentos y retroalimentación individual.</p>
+              <p class="text-xs text-slate-500">Gestiona entregas, enlaces, documentos y calificaciones por estudiante.</p>
             </div>
             <button type="button" id="btn-open-new-activity" onclick="window.MMApp.openNewActivityModal()" class="hidden px-4 py-2 rounded-xl bg-marymount-navy hover:bg-marymount-blue text-white text-xs font-extrabold transition">
               <i class="fa-solid fa-plus mr-1.5"></i>Nueva Actividad
@@ -1125,7 +1131,7 @@
       </div>
       <form id="form-bulk-import" class="p-6 space-y-4 text-xs">
         <p id="bulk-import-subtitle" class="text-slate-600 leading-relaxed">
-          Pega filas desde Excel o texto con formato: <strong>Nombre, Apellido, correo@marymountbq.edu.co</strong> (una persona por línea).
+          Pega filas desde Excel o texto con formato: <strong>Apellidos, nombres, correo@marymountbq.edu.co</strong> (una persona por línea).
         </p>
         <div id="bulk-import-section-box" class="hidden">
           <label class="block font-bold text-slate-700 mb-1">Salón de Destino</label>
@@ -1137,7 +1143,7 @@
         </div>
         <div>
           <label class="block font-bold text-slate-700 mb-1">Lista de Registros</label>
-          <textarea id="bulk-import-textarea" rows="7" required placeholder="Sofía&#9;Martínez&#9;sofia.martinez@marymountbq.edu.co&#10;Mateo&#9;Gómez&#9;mateo.gomez@marymountbq.edu.co" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-mono text-xs outline-none focus:border-marymount-sky"></textarea>
+          <textarea id="bulk-import-textarea" rows="7" required placeholder="Martínez&#9;Sofía&#9;sofia.martinez@marymountbq.edu.co&#10;Gómez&#9;Mateo&#9;mateo.gomez@marymountbq.edu.co" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-mono text-xs outline-none focus:border-marymount-sky"></textarea>
         </div>
         <div class="flex justify-end gap-2 pt-2 border-t border-slate-200">
           <button type="button" onclick="document.getElementById('modal-bulk-import').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold">Cancelar</button>
@@ -1351,13 +1357,13 @@
           <div id="mat-draft-links-list" class="space-y-2"></div>
         </div>
 
-        <!-- Documentos PDF / Imágenes con nombre editable -->
+        <!-- Documentos PDF / Imágenes / Word / Excel con nombre editable -->
         <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
           <div class="flex items-center justify-between">
-            <span class="font-extrabold text-slate-700">Documentos o Imágenes Adjuntos</span>
+            <span class="font-extrabold text-slate-700">Documentos o Archivos Adjuntos</span>
             <label class="cursor-pointer px-3 py-1.5 rounded-xl bg-white hover:bg-sky-50 text-marymount-navy border border-slate-300 font-bold text-[11px]">
               <i class="fa-solid fa-upload mr-1"></i>Subir Archivo
-              <input id="mat-files-input" type="file" multiple accept=".pdf,image/jpeg,image/png,image/webp" onchange="window.MMApp.handleMaterialFilesSelected()" class="hidden" />
+              <input id="mat-files-input" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,image/*" onchange="window.MMApp.handleMaterialFilesSelected()" class="hidden" />
             </label>
           </div>
           <div id="mat-draft-files-list" class="space-y-2"></div>
@@ -1428,6 +1434,17 @@
           <div id="act-draft-links-list" class="space-y-2"></div>
         </div>
 
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-slate-700">Documentos o Guías Adjuntas (Opcional)</span>
+            <label class="cursor-pointer px-3 py-1.5 rounded-xl bg-white hover:bg-sky-50 text-marymount-navy border border-slate-300 font-bold text-[11px]">
+              <i class="fa-solid fa-upload mr-1"></i>Subir Archivo
+              <input id="act-files-input" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,image/*" onchange="window.MMApp.handleActivityFilesSelected()" class="hidden" />
+            </label>
+          </div>
+          <div id="act-draft-files-list" class="space-y-2"></div>
+        </div>
+
         <div id="act-target-classes-box" class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
           <span class="block font-extrabold text-marymount-navy">Publicar en salones:</span>
           <div id="act-target-classes-list" class="grid grid-cols-2 sm:grid-cols-4 gap-1.5"></div>
@@ -1469,10 +1486,10 @@
 
         <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-slate-700">Archivos Adjuntos (PDF o Imagen)</span>
+            <span class="font-bold text-slate-700">Archivos Adjuntos (PDF o Documento)</span>
             <label class="cursor-pointer px-3 py-1 rounded-lg bg-white border border-slate-300 font-bold text-marymount-navy text-[11px]">
               <i class="fa-solid fa-upload mr-1"></i>Subir Archivo
-              <input id="sub-files-input" type="file" multiple accept=".pdf,image/jpeg,image/png,image/webp" onchange="window.MMApp.handleSubmissionFilesSelected()" class="hidden" />
+              <input id="sub-files-input" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,image/*" onchange="window.MMApp.handleSubmissionFilesSelected()" class="hidden" />
             </label>
           </div>
           <div id="sub-draft-files-list" class="space-y-2"></div>
@@ -1533,7 +1550,7 @@
             </span>
             <label class="cursor-pointer px-3 py-1.5 rounded-xl bg-white hover:bg-sky-50 text-marymount-navy border border-slate-300 font-bold text-[11px] transition">
               <i class="fa-solid fa-upload mr-1"></i>Adjuntar Nuevos Documentos
-              <input id="edit-ann-new-files" type="file" multiple accept=".pdf,image/jpeg,image/png,image/webp" class="hidden" onchange="window.MMApp.previewNewEditAnnouncementFiles()" />
+              <input id="edit-ann-new-files" type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,image/*" class="hidden" onchange="window.MMApp.previewNewEditAnnouncementFiles()" />
             </label>
           </div>
           <div id="edit-ann-attachments-container" class="space-y-2"></div>
@@ -1591,21 +1608,24 @@
     </div>
   </div>
 
-  <!-- MODAL VISOR DE ARCHIVOS / ENLACES -->
+  <!-- MODAL VISOR DE ARCHIVOS / DOCUMENTOS -->
   <div id="modal-resource-viewer" class="hidden fixed inset-0 z-[70] bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5">
     <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="bg-marymount-navy text-white px-6 py-3.5 flex items-center justify-between shrink-0">
-        <h3 id="viewer-resource-title" class="font-extrabold text-sm truncate pr-4">Vista Previa</h3>
-        <div class="flex items-center gap-2">
-          <a id="viewer-external-link" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-3 py-1 rounded-xl bg-sky-500/25 border border-sky-400/40 text-sky-200 hover:text-white text-xs font-bold">
-            <i class="fa-solid fa-up-right-from-square mr-1"></i>Abrir afuera
+      <div class="bg-marymount-navy text-white px-6 py-3.5 flex items-center justify-between shrink-0 gap-2">
+        <h3 id="viewer-resource-title" class="font-extrabold text-sm truncate pr-2">Vista Previa</h3>
+        <div class="flex items-center gap-2 shrink-0">
+          <a id="viewer-download-link" href="#" download="documento" class="hidden px-3 py-1.5 rounded-xl bg-emerald-500/25 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold">
+            <i class="fa-solid fa-download mr-1"></i>Descargar
           </a>
-          <button type="button" onclick="document.getElementById('modal-resource-viewer').classList.add('hidden')" class="text-sky-200 hover:text-white p-1">
+          <a id="viewer-external-link" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-3 py-1.5 rounded-xl bg-sky-500/25 border border-sky-400/40 text-sky-200 hover:text-white text-xs font-bold">
+            <i class="fa-solid fa-up-right-from-square mr-1"></i>Abrir en pestaña
+          </a>
+          <button type="button" onclick="window.MMApp.closeResourceViewer()" class="text-sky-200 hover:text-white p-1">
             <i class="fa-solid fa-xmark text-lg"></i>
           </button>
         </div>
       </div>
-      <div id="viewer-resource-body" class="p-4 bg-slate-100 flex-1 overflow-auto flex items-center justify-center min-h-[360px]"></div>
+      <div id="viewer-resource-body" class="p-4 bg-slate-100 flex-1 overflow-auto flex items-center justify-center min-h-[380px]"></div>
     </div>
   </div>
 
@@ -1690,6 +1710,22 @@
   </div>
 
   <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getAuth,
+      signInAnonymously,
+      signInWithCustomToken
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      deleteDoc,
+      onSnapshot,
+      collection,
+      writeBatch
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
     // =========================================================================
     // 1. CONSTANTES INSTITUCIONALES Y DICCIONARIO BILINGÜE (ES / EN)
     // =========================================================================
@@ -1747,6 +1783,9 @@
       "notifications"
     ];
 
+    // Colecciones compartidas entre todos los dispositivos del campus
+    const CLOUD_STORES = STORES.filter((s) => s !== "meta");
+
     const TRANSLATIONS = {
       es: {
         topbar_subtitle: "Colegio Marymount • Espacio Académico Bilingüe",
@@ -1779,8 +1818,18 @@
     };
 
     // =========================================================================
-    // 2. UTILIDADES DE FORMATO, ORDENAMIENTO Y SEGURIDAD
+    // 2. UTILIDADES GENERALES, COLORES DE SALÓN, NOTAS Y VISOR BLOB
     // =========================================================================
+    let activeViewerBlobUrl = null;
+
+    function normalizeEmail(email) {
+      return String(email || "").trim().toLowerCase();
+    }
+
+    function generateId(prefix = "id") {
+      return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+    }
+
     function escapeHTML(str) {
       return String(str ?? "")
         .replace(/&/g, "&amp;")
@@ -1790,107 +1839,94 @@
         .replace(/'/g, "&#39;");
     }
 
-    function normalizeEmail(email) {
-      return String(email ?? "").trim().toLowerCase();
+    function formatPersonFirstLast(user) {
+      if (!user) return "Usuario";
+      const full = `${String(user.firstName || "").trim()} ${String(user.lastName || "").trim()}`.trim();
+      return full || user.email || "Usuario";
     }
 
-    function generateId(prefix = "id") {
-      return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    }
-
-    function formatPersonFirstLast(person) {
-      if (!person) return "";
-      const first = String(person.firstName ?? "").trim();
-      const last = String(person.lastName ?? "").trim();
-      return `${first} ${last}`.trim();
-    }
-
-    function formatStudentLastFirstForGradebook(student) {
-      if (!student) return "";
-      const first = String(student.firstName ?? "").trim();
-      const last = String(student.lastName ?? "").trim();
-      return `${last} ${first}`.trim();
+    function formatStudentLastFirstForGradebook(user) {
+      if (!user) return "Estudiante";
+      const full = `${String(user.lastName || "").trim()} ${String(user.firstName || "").trim()}`.trim();
+      return full || user.email || "Estudiante";
     }
 
     function compareStudentsByLastNameAsc(a, b) {
-      const lastA = String(a?.lastName ?? "").trim();
-      const lastB = String(b?.lastName ?? "").trim();
-      const cmpLast = lastA.localeCompare(lastB, "es", { sensitivity: "base" });
-      if (cmpLast !== 0) return cmpLast;
-      const firstA = String(a?.firstName ?? "").trim();
-      const firstB = String(b?.firstName ?? "").trim();
+      const lastA = String(a?.lastName || "").trim();
+      const lastB = String(b?.lastName || "").trim();
+      const lastCmp = lastA.localeCompare(lastB, "es", { sensitivity: "base" });
+      if (lastCmp !== 0) return lastCmp;
+      const firstA = String(a?.firstName || "").trim();
+      const firstB = String(b?.firstName || "").trim();
       return firstA.localeCompare(firstB, "es", { sensitivity: "base" });
     }
 
     function isValidUserPassword(pwd) {
-      const val = String(pwd ?? "").trim();
+      const val = String(pwd || "").trim();
       if (val.length < 4) return false;
       if (/^\d+$/.test(val)) return val.length <= 6;
-      if (/^[a-zA-Z0-9]+$/.test(val)) return val.length <= 8;
-      return false;
+      return /^[a-zA-Z0-9]+$/.test(val) && val.length <= 8;
     }
 
-    function getGradeColorClass(rawVal, fallbackClass = "text-slate-900") {
-      if (rawVal === undefined || rawVal === null || rawVal === "") return fallbackClass;
-      const num = Number(String(rawVal).trim().replace(",", "."));
-      if (Number.isNaN(num)) return fallbackClass;
+    function getGradeColorClass(score) {
+      if (score === null || score === undefined || score === "" || Number.isNaN(Number(score))) {
+        return "text-slate-900";
+      }
+      const num = Number(score);
       if (num < 70) return "text-red-600";
       if (num < 80) return "text-slate-900";
       if (num < 90) return "text-blue-600";
       return "text-emerald-600";
     }
 
-    function applyGradeColorToElement(el, rawVal, fallbackClass = "text-slate-900") {
+    function applyGradeColorToElement(el, score) {
       if (!el) return;
       el.classList.remove(
         "text-red-600",
         "text-slate-900",
+        "text-slate-800",
         "text-blue-600",
-        "text-emerald-600",
-        "text-marymount-navy",
-        "text-marymount-blue",
-        "text-amber-950",
-        "text-indigo-950"
+        "text-emerald-600"
       );
-      el.classList.add(getGradeColorClass(rawVal, fallbackClass));
+      el.classList.add(getGradeColorClass(score));
     }
 
     function getSectionColorStyle(sectionName) {
-      const low = String(sectionName ?? "").toLowerCase();
+      const low = String(sectionName || "").toLowerCase();
       if (low.includes("yellow")) {
         return {
-          badge: "bg-amber-100 text-amber-900 border-amber-300",
-          sidebar: "bg-amber-50/90 border-amber-300 text-amber-950 hover:bg-amber-100",
+          pill: "bg-amber-100 text-amber-900 border-amber-300",
+          sidebar: "bg-amber-50/90 border-amber-300 text-amber-950 hover:bg-amber-100/80",
           accent: "border-l-4 border-l-amber-400",
           dot: "bg-amber-400"
         };
       }
       if (low.includes("blue")) {
         return {
-          badge: "bg-sky-100 text-sky-900 border-sky-300",
-          sidebar: "bg-sky-50/90 border-sky-300 text-sky-950 hover:bg-sky-100",
+          pill: "bg-sky-100 text-sky-900 border-sky-300",
+          sidebar: "bg-sky-50/90 border-sky-300 text-sky-950 hover:bg-sky-100/80",
           accent: "border-l-4 border-l-sky-500",
           dot: "bg-sky-500"
         };
       }
       if (low.includes("red")) {
         return {
-          badge: "bg-rose-100 text-rose-900 border-rose-300",
-          sidebar: "bg-rose-50/90 border-rose-300 text-rose-950 hover:bg-rose-100",
+          pill: "bg-rose-100 text-rose-900 border-rose-300",
+          sidebar: "bg-rose-50/90 border-rose-300 text-rose-950 hover:bg-rose-100/80",
           accent: "border-l-4 border-l-rose-500",
           dot: "bg-rose-500"
         };
       }
       if (low.includes("green")) {
         return {
-          badge: "bg-emerald-100 text-emerald-900 border-emerald-300",
-          sidebar: "bg-emerald-50/90 border-emerald-300 text-emerald-950 hover:bg-emerald-100",
+          pill: "bg-emerald-100 text-emerald-900 border-emerald-300",
+          sidebar: "bg-emerald-50/90 border-emerald-300 text-emerald-950 hover:bg-emerald-100/80",
           accent: "border-l-4 border-l-emerald-500",
           dot: "bg-emerald-500"
         };
       }
       return {
-        badge: "bg-slate-100 text-slate-800 border-slate-300",
+        pill: "bg-slate-100 text-slate-800 border-slate-300",
         sidebar: "bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100",
         accent: "border-l-4 border-l-slate-400",
         dot: "bg-slate-400"
@@ -1899,36 +1935,38 @@
 
     function renderSectionPill(sectionName) {
       const st = getSectionColorStyle(sectionName);
-      return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border text-[11px] font-extrabold ${st.badge}">
+      return `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border text-[11px] font-extrabold ${st.pill}">
         <span class="w-2 h-2 rounded-full ${st.dot}"></span>
-        ${escapeHTML(sectionName)}
+        <span>${escapeHTML(sectionName)}</span>
       </span>`;
     }
 
     function showToast(message, type = "info") {
       const container = document.getElementById("toast-container");
       if (!container) return;
-      const styles = {
-        success: "bg-emerald-900 text-white border-emerald-500",
-        error: "bg-rose-900 text-white border-rose-500",
-        warning: "bg-amber-900 text-white border-amber-500",
-        info: "bg-marymount-navy text-white border-sky-400"
+      const palette = {
+        success: "bg-emerald-900 text-emerald-50 border-emerald-600",
+        error: "bg-red-900 text-red-50 border-red-600",
+        warning: "bg-amber-900 text-amber-50 border-amber-500",
+        info: "bg-marymount-navy text-white border-sky-500"
       };
-      const icons = {
+      const icon = {
         success: "fa-circle-check text-emerald-300",
-        error: "fa-circle-xmark text-rose-300",
+        error: "fa-circle-xmark text-red-300",
         warning: "fa-triangle-exclamation text-amber-300",
         info: "fa-circle-info text-sky-300"
       };
-      const el = document.createElement("div");
-      el.className = `pointer-events-auto px-3.5 py-2.5 rounded-2xl border shadow-lg text-xs font-bold flex items-center gap-2 transition-all duration-300 ${styles[type] || styles.info}`;
-      el.innerHTML = `<i class="fa-solid ${icons[type] || icons.info} shrink-0"></i><span>${escapeHTML(message)}</span>`;
-      container.appendChild(el);
+      const toast = document.createElement("div");
+      toast.className = `pointer-events-auto px-3 py-2 rounded-2xl border shadow-lg text-[11px] font-bold flex items-start gap-2 transition-all duration-200 ${
+        palette[type] || palette.info
+      }`;
+      toast.innerHTML = `<i class="fa-solid ${icon[type] || icon.info} mt-0.5 shrink-0"></i><span class="leading-snug">${escapeHTML(message)}</span>`;
+      container.appendChild(toast);
       setTimeout(() => {
-        el.style.opacity = "0";
-        el.style.transform = "translateY(6px)";
-        setTimeout(() => el.remove(), 260);
-      }, 3200);
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(4px)";
+        setTimeout(() => toast.remove(), 220);
+      }, 3400);
     }
 
     function customConfirmDialog(message, title = "Confirmar Acción") {
@@ -1938,42 +1976,101 @@
         const msgEl = document.getElementById("confirm-modal-message");
         const okBtn = document.getElementById("confirm-modal-ok");
         const cancelBtn = document.getElementById("confirm-modal-cancel");
+
         if (!modal || !okBtn || !cancelBtn) {
-          resolve(true);
+          resolve(false);
           return;
         }
-        titleEl.textContent = title;
-        msgEl.textContent = message;
+
+        if (titleEl) titleEl.textContent = title;
+        if (msgEl) msgEl.textContent = message;
         modal.classList.remove("hidden");
 
         const cleanup = (result) => {
           modal.classList.add("hidden");
-          okBtn.onclick = null;
-          cancelBtn.onclick = null;
+          okBtn.removeEventListener("click", onOk);
+          cancelBtn.removeEventListener("click", onCancel);
           resolve(result);
         };
-        okBtn.onclick = () => cleanup(true);
-        cancelBtn.onclick = () => cleanup(false);
+
+        const onOk = () => cleanup(true);
+        const onCancel = () => cleanup(false);
+
+        okBtn.addEventListener("click", onOk);
+        cancelBtn.addEventListener("click", onCancel);
       });
+    }
+
+    function inferMimeTypeFromFilename(filename, fallbackType = "") {
+      if (fallbackType) return fallbackType;
+      const low = String(filename || "").toLowerCase();
+      if (low.endsWith(".pdf")) return "application/pdf";
+      if (low.endsWith(".doc")) return "application/msword";
+      if (low.endsWith(".docx")) return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+      if (low.endsWith(".xls")) return "application/vnd.ms-excel";
+      if (low.endsWith(".xlsx")) return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+      if (low.endsWith(".ppt")) return "application/vnd.ms-powerpoint";
+      if (low.endsWith(".pptx")) return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+      if (low.endsWith(".csv")) return "text/csv";
+      if (low.endsWith(".txt")) return "text/plain";
+      if (low.endsWith(".png")) return "image/png";
+      if (low.endsWith(".jpg") || low.endsWith(".jpeg")) return "image/jpeg";
+      if (low.endsWith(".webp")) return "image/webp";
+      if (low.endsWith(".gif")) return "image/gif";
+      return "application/octet-stream";
     }
 
     function readFileAsDataURL(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = () =>
+        reader.onload = () => {
           resolve({
             name: file.name,
-            type: file.type,
+            type: inferMimeTypeFromFilename(file.name, file.type),
             size: file.size,
             dataUrl: reader.result
           });
-        reader.onerror = () => reject(reader.error);
+        };
+        reader.onerror = (err) => reject(err);
         reader.readAsDataURL(file);
       });
     }
 
+    function dataUrlToBlobUrl(dataUrl, filename = "", fallbackType = "") {
+      try {
+        const str = String(dataUrl || "");
+        if (!str.startsWith("data:")) return str;
+        const commaIdx = str.indexOf(",");
+        if (commaIdx === -1) return str;
+        const meta = str.slice(5, commaIdx);
+        const rawData = str.slice(commaIdx + 1);
+        const isBase64 = meta.includes(";base64");
+        const mimeFromMeta = meta.split(";")[0];
+        const mimeType = inferMimeTypeFromFilename(filename, mimeFromMeta || fallbackType);
+
+        let byteArray;
+        if (isBase64) {
+          const binary = atob(rawData);
+          const len = binary.length;
+          byteArray = new Uint8Array(len);
+          for (let i = 0; i < len; i++) {
+            byteArray[i] = binary.charCodeAt(i);
+          }
+        } else {
+          const decoded = decodeURIComponent(rawData);
+          byteArray = new TextEncoder().encode(decoded);
+        }
+
+        const blob = new Blob([byteArray], { type: mimeType });
+        return URL.createObjectURL(blob);
+      } catch (err) {
+        console.warn("Error creando Blob URL:", err);
+        return dataUrl;
+      }
+    }
+
     // =========================================================================
-    // 3. MOTOR DE PERSISTENCIA INDEXEDDB + SINCRONIZACIÓN LOCAL EN TIEMPO REAL
+    // 3. MOTOR DE PERSISTENCIA HÍBRIDO: NUBE EN TIEMPO REAL + INDEXEDDB LOCAL
     // =========================================================================
     class CampusLocalDB {
       constructor() {
@@ -1990,6 +2087,38 @@
             }
           };
         }
+
+        // Estado de conexión compartida entre dispositivos
+        this.cloudApp = null;
+        this.cloudAuth = null;
+        this.cloudDb = null;
+        this.cloudReady = false;
+        this.appId = typeof __app_id !== "undefined" ? __app_id : "default-app-id";
+        this.unsubscribers = [];
+      }
+
+      updateSyncStatusUI(state, customText = "") {
+        const topDot = document.getElementById("sync-status-dot");
+        const topText = document.getElementById("sync-status-text");
+        const loginDot = document.getElementById("login-cloud-dot");
+        const loginText = document.getElementById("login-cloud-text");
+
+        const labels = {
+          connecting: customText || "Conectando nube...",
+          connected: customText || "Sincronizado en nube",
+          local: customText || "Modo local"
+        };
+
+        const dotClasses = {
+          connecting: "w-2 h-2 rounded-full bg-amber-400 animate-pulse",
+          connected: "w-2 h-2 rounded-full bg-emerald-400",
+          local: "w-2 h-2 rounded-full bg-slate-400"
+        };
+
+        if (topDot) topDot.className = dotClasses[state] || dotClasses.local;
+        if (topText) topText.textContent = labels[state] || labels.local;
+        if (loginDot) loginDot.className = dotClasses[state] || dotClasses.local;
+        if (loginText) loginText.textContent = labels[state] || labels.local;
       }
 
       subscribe(fn) {
@@ -2057,6 +2186,175 @@
         });
       }
 
+      async replaceIDBStore(storeName, items) {
+        await this.openIDB();
+        return new Promise((resolve) => {
+          const tx = this.db.transaction(storeName, "readwrite");
+          const store = tx.objectStore(storeName);
+          store.clear();
+          items.forEach((item) => {
+            const key = storeName === "users" ? normalizeEmail(item.email) : item.id;
+            if (!key) return;
+            const normalized = storeName === "users" ? { ...item, email: key } : item;
+            store.put(normalized);
+          });
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => resolve();
+        });
+      }
+
+      getCloudCollection(storeName) {
+        return collection(this.cloudDb, "artifacts", this.appId, "public", "data", storeName);
+      }
+
+      getCloudDocRef(storeName, rawKey) {
+        const safeId = encodeURIComponent(String(rawKey));
+        return doc(this.cloudDb, "artifacts", this.appId, "public", "data", storeName, safeId);
+      }
+
+      prepareCloudPayload(item) {
+        const clone = JSON.parse(JSON.stringify(item));
+        const serialized = JSON.stringify(clone);
+        if (serialized.length <= 900000) {
+          return { payload: clone, trimmed: false };
+        }
+        if (Array.isArray(clone.attachments)) {
+          clone.attachments = clone.attachments.map((att) => ({
+            name: att.name,
+            type: att.type,
+            size: att.size,
+            dataUrl: att.dataUrl && att.dataUrl.length < 250000 ? att.dataUrl : ""
+          }));
+        }
+        return { payload: clone, trimmed: true };
+      }
+
+      async initCloudSync() {
+        const rawConfig = typeof __firebase_config !== "undefined" ? __firebase_config : null;
+        if (!rawConfig) {
+          this.updateSyncStatusUI("local");
+          return;
+        }
+
+        try {
+          this.updateSyncStatusUI("connecting");
+          const parsedConfig = typeof rawConfig === "string" ? JSON.parse(rawConfig) : rawConfig;
+          this.cloudApp = initializeApp(parsedConfig);
+          this.cloudAuth = getAuth(this.cloudApp);
+          this.cloudDb = getFirestore(this.cloudApp);
+
+          // Autenticación obligatoria antes de cualquier consulta en la nube
+          if (typeof __initial_auth_token !== "undefined" && __initial_auth_token) {
+            await signInWithCustomToken(this.cloudAuth, __initial_auth_token);
+          } else {
+            await signInAnonymously(this.cloudAuth);
+          }
+
+          if (!this.cloudAuth.currentUser) {
+            this.updateSyncStatusUI("local");
+            return;
+          }
+
+          this.cloudReady = true;
+
+          // Respaldo de registros locales previos por si la nube aún está vacía
+          const preCloudSnapshots = {};
+          CLOUD_STORES.forEach((s) => {
+            preCloudSnapshots[s] = Array.from(this.cache[s]?.values() || []);
+          });
+
+          // Escuchar todas las colecciones compartidas y esperar la carga inicial
+          const initialLoadPromises = CLOUD_STORES.map((storeName) => {
+            return new Promise((resolveInitial) => {
+              let settled = false;
+              const markSettled = () => {
+                if (!settled) {
+                  settled = true;
+                  resolveInitial();
+                }
+              };
+
+              // Tiempo máximo de espera para arranque fluido
+              const fallbackTimer = setTimeout(markSettled, 6000);
+
+              const unsub = onSnapshot(
+                this.getCloudCollection(storeName),
+                async (snapshot) => {
+                  clearTimeout(fallbackTimer);
+
+                  // Si es la primera carga, la nube está vacía y este dispositivo tenía datos locales previos,
+                  // migramos automáticamente los registros locales hacia la nube compartida.
+                  if (!settled && snapshot.empty && preCloudSnapshots[storeName].length > 0) {
+                    await this.pushItemsToCloud(storeName, preCloudSnapshots[storeName]);
+                    markSettled();
+                    return;
+                  }
+
+                  const map = new Map();
+                  const items = [];
+                  snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (!data) return;
+                    const key = storeName === "users" ? normalizeEmail(data.email) : data.id;
+                    if (!key) return;
+                    const normalized = storeName === "users" ? { ...data, email: key } : { ...data };
+                    map.set(key, normalized);
+                    items.push(normalized);
+                  });
+
+                  this.cache[storeName] = map;
+                  await this.replaceIDBStore(storeName, items);
+                  this.notifyListeners();
+                  markSettled();
+                },
+                (error) => {
+                  clearTimeout(fallbackTimer);
+                  console.warn(`Error escuchando colección ${storeName}:`, error);
+                  markSettled();
+                }
+              );
+
+              this.unsubscribers.push(unsub);
+            });
+          });
+
+          await Promise.all(initialLoadPromises);
+          this.updateSyncStatusUI("connected");
+        } catch (err) {
+          console.warn("No se pudo iniciar sincronización en nube, usando modo local:", err);
+          this.cloudReady = false;
+          this.updateSyncStatusUI("local");
+        }
+      }
+
+      async pushItemsToCloud(storeName, items) {
+        if (!this.cloudReady || !this.cloudAuth?.currentUser || storeName === "meta") return;
+        if (!items || items.length === 0) return;
+
+        let anyTrimmed = false;
+        const CHUNK_SIZE = 400;
+        for (let i = 0; i < items.length; i += CHUNK_SIZE) {
+          const slice = items.slice(i, i + CHUNK_SIZE);
+          const batch = writeBatch(this.cloudDb);
+          slice.forEach((item) => {
+            const key = storeName === "users" ? normalizeEmail(item.email) : item.id;
+            if (!key) return;
+            const normalized = storeName === "users" ? { ...item, email: key } : { ...item };
+            const { payload, trimmed } = this.prepareCloudPayload(normalized);
+            if (trimmed) anyTrimmed = true;
+            batch.set(this.getCloudDocRef(storeName, key), payload);
+          });
+          await batch.commit();
+        }
+
+        if (anyTrimmed) {
+          showToast(
+            "Un archivo supera 900 KB para la nube; usa un enlace de Drive para verlo en otros dispositivos.",
+            "warning"
+          );
+        }
+      }
+
       get(storeName, key) {
         if (!key) return null;
         const k = storeName === "users" ? normalizeEmail(key) : key;
@@ -2079,6 +2377,22 @@
           tx.oncomplete = () => resolve();
           tx.onerror = (e) => reject(e.target.error);
         });
+
+        if (this.cloudReady && this.cloudAuth?.currentUser && storeName !== "meta") {
+          try {
+            const { payload, trimmed } = this.prepareCloudPayload(normalized);
+            await setDoc(this.getCloudDocRef(storeName, key), payload);
+            if (trimmed) {
+              showToast(
+                "Archivo mayor a 900 KB: para abrirlo en otros dispositivos usa un enlace externo.",
+                "warning"
+              );
+            }
+          } catch (err) {
+            console.warn(`Error guardando en nube (${storeName}):`, err);
+          }
+        }
+
         if (!opts.silent) {
           this.broadcastChange();
           this.notifyListeners();
@@ -2101,6 +2415,15 @@
           tx.oncomplete = () => resolve();
           tx.onerror = (e) => reject(e.target.error);
         });
+
+        if (this.cloudReady && this.cloudAuth?.currentUser && storeName !== "meta") {
+          try {
+            await this.pushItemsToCloud(storeName, items);
+          } catch (err) {
+            console.warn(`Error en guardado masivo en nube (${storeName}):`, err);
+          }
+        }
+
         if (!opts.silent) {
           this.broadcastChange();
           this.notifyListeners();
@@ -2118,6 +2441,15 @@
           tx.oncomplete = () => resolve();
           tx.onerror = (e) => reject(e.target.error);
         });
+
+        if (this.cloudReady && this.cloudAuth?.currentUser && storeName !== "meta") {
+          try {
+            await deleteDoc(this.getCloudDocRef(storeName, k));
+          } catch (err) {
+            console.warn(`Error eliminando en nube (${storeName}):`, err);
+          }
+        }
+
         if (!opts.silent) {
           this.broadcastChange();
           this.notifyListeners();
@@ -2126,7 +2458,9 @@
 
       async ensureSeeded() {
         await this.openIDB();
-        await this.reloadAllFromIDB();
+        if (!this.cloudReady) {
+          await this.reloadAllFromIDB();
+        }
 
         const catalogMigrated = this.get("meta", "official_catalog_v2");
         if (!catalogMigrated) {
@@ -2229,6 +2563,14 @@
         if (this.getAll("subjects").length === 0) {
           await this.bulkPut("subjects", DEFAULT_OFFICIAL_SUBJECTS, { silent: true });
         }
+
+        // Asegurar que la estructura base quede sincronizada en la nube si aún no existía
+        if (this.cloudReady && this.cloudAuth?.currentUser) {
+          await this.pushItemsToCloud("departments", this.getAll("departments"));
+          await this.pushItemsToCloud("grades", this.getAll("grades"));
+          await this.pushItemsToCloud("sections", this.getAll("sections"));
+          await this.pushItemsToCloud("subjects", this.getAll("subjects"));
+        }
       }
     }
 
@@ -2250,7 +2592,8 @@
     const classroomState = {
       classroomId: null,
       activeTab: "novedades",
-      gbHeaderFontSize: "md"
+      gbHeaderFontSize: "md",
+      expandedActivityGradingId: null
     };
 
     const bulkImportState = {
@@ -2264,6 +2607,7 @@
       matLinks: [],
       matFiles: [],
       actLinks: [],
+      actFiles: [],
       subLinks: [],
       subFiles: [],
       editAnnLinks: [],
@@ -4232,6 +4576,17 @@
         .join("");
     }
 
+    function getFileIconClass(filename, mimeType = "") {
+      const low = String(filename || "").toLowerCase();
+      const mime = String(mimeType || "").toLowerCase();
+      if (low.endsWith(".pdf") || mime.includes("pdf")) return "fa-file-pdf text-rose-600";
+      if (low.endsWith(".doc") || low.endsWith(".docx") || mime.includes("word")) return "fa-file-word text-blue-600";
+      if (low.endsWith(".xls") || low.endsWith(".xlsx") || low.endsWith(".csv") || mime.includes("excel") || mime.includes("spreadsheet")) return "fa-file-excel text-emerald-600";
+      if (low.endsWith(".ppt") || low.endsWith(".pptx") || mime.includes("presentation")) return "fa-file-powerpoint text-amber-600";
+      if (mime.startsWith("image/") || /\.(png|jpe?g|webp|gif)$/.test(low)) return "fa-file-image text-sky-600";
+      return "fa-file-lines text-slate-600";
+    }
+
     function renderResourceBadgesHTML(storeName, docId, links = [], attachments = [], canEdit = false) {
       const validLinks = (links || []).filter((l) => l && l.url);
       const validFiles = (attachments || []).filter((f) => f && f.dataUrl);
@@ -4259,15 +4614,19 @@
 
       const filesHTML = validFiles
         .map((f, idx) => {
+          const iconClass = getFileIconClass(f.name, f.type);
           return `
-          <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-800 text-xs font-bold">
-            <button type="button" onclick="window.MMApp.openResourceViewer('${storeName}', '${docId}', ${idx})" class="hover:underline flex items-center gap-1.5">
-              <i class="fa-solid fa-file-pdf text-rose-600"></i>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/70 border border-slate-300 text-slate-800 text-xs font-bold transition">
+            <button type="button" onclick="window.MMApp.openResourceViewer('${storeName}', '${docId}', ${idx})" class="hover:underline flex items-center gap-1.5 text-left">
+              <i class="fa-solid ${iconClass}"></i>
               <span>${escapeHTML(f.name)}</span>
+            </button>
+            <button type="button" onclick="window.MMApp.downloadStoredAttachment('${storeName}', '${docId}', ${idx})" class="text-slate-500 hover:text-emerald-700 ml-1" title="Descargar documento">
+              <i class="fa-solid fa-download text-[11px]"></i>
             </button>
             ${
               canEdit
-                ? `<button type="button" onclick="window.MMApp.openRenameResourceModal('${storeName}', '${docId}', 'attachments', ${idx})" class="text-slate-400 hover:text-marymount-navy ml-1" title="Editar nombre">
+                ? `<button type="button" onclick="window.MMApp.openRenameResourceModal('${storeName}', '${docId}', 'attachments', ${idx})" class="text-slate-400 hover:text-marymount-navy ml-0.5" title="Editar nombre">
                     <i class="fa-solid fa-pen text-[10px]"></i>
                   </button>`
                 : ""
@@ -4279,22 +4638,102 @@
       return `<div class="flex flex-wrap gap-2 pt-2">${linksHTML}${filesHTML}</div>`;
     }
 
+    function downloadStoredAttachment(storeName, docId, attachmentIdx) {
+      const doc = campusDB.get(storeName, docId);
+      const file = doc?.attachments?.[attachmentIdx];
+      if (!file?.dataUrl) return;
+      const blobUrl = dataUrlToBlobUrl(file.dataUrl, file.name, file.type);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = file.name || "documento";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => {
+        if (String(blobUrl).startsWith("blob:")) URL.revokeObjectURL(blobUrl);
+      }, 4000);
+    }
+
+    function closeResourceViewer() {
+      document.getElementById("modal-resource-viewer")?.classList.add("hidden");
+      const body = document.getElementById("viewer-resource-body");
+      if (body) body.innerHTML = "";
+      if (activeViewerBlobUrl && String(activeViewerBlobUrl).startsWith("blob:")) {
+        setTimeout(() => {
+          URL.revokeObjectURL(activeViewerBlobUrl);
+        }, 500);
+      }
+      activeViewerBlobUrl = null;
+    }
+
     function openResourceViewer(storeName, docId, attachmentIdx) {
       const doc = campusDB.get(storeName, docId);
       const file = doc?.attachments?.[attachmentIdx];
-      if (!file) return;
-      document.getElementById("viewer-resource-title").textContent = file.name || "Documento";
+      if (!file?.dataUrl) return;
+
+      if (activeViewerBlobUrl && String(activeViewerBlobUrl).startsWith("blob:")) {
+        URL.revokeObjectURL(activeViewerBlobUrl);
+      }
+
+      const fileName = file.name || "Documento";
+      const mimeType = inferMimeTypeFromFilename(fileName, file.type);
+      const blobUrl = dataUrlToBlobUrl(file.dataUrl, fileName, mimeType);
+      activeViewerBlobUrl = blobUrl;
+
+      document.getElementById("viewer-resource-title").textContent = fileName;
+
+      const dlLink = document.getElementById("viewer-download-link");
+      if (dlLink) {
+        dlLink.href = blobUrl;
+        dlLink.setAttribute("download", fileName);
+        dlLink.classList.remove("hidden");
+      }
+
       const extLink = document.getElementById("viewer-external-link");
       if (extLink) {
-        extLink.href = file.dataUrl;
+        extLink.href = blobUrl;
         extLink.classList.remove("hidden");
       }
+
       const body = document.getElementById("viewer-resource-body");
-      if (String(file.type || "").startsWith("image/")) {
-        body.innerHTML = `<img src="${file.dataUrl}" alt="${escapeHTML(file.name)}" class="max-h-[75vh] max-w-full rounded-xl shadow" />`;
+      const lowName = fileName.toLowerCase();
+
+      if (mimeType.startsWith("image/") || /\.(png|jpe?g|webp|gif)$/.test(lowName)) {
+        body.innerHTML = `<img src="${blobUrl}" alt="${escapeHTML(fileName)}" class="max-h-[75vh] max-w-full rounded-xl shadow" />`;
+      } else if (mimeType === "application/pdf" || lowName.endsWith(".pdf")) {
+        body.innerHTML = `
+          <div class="w-full h-[75vh] flex flex-col gap-2">
+            <object data="${blobUrl}" type="application/pdf" class="w-full flex-1 rounded-xl border border-slate-300 bg-white">
+              <iframe src="${blobUrl}" class="w-full h-full rounded-xl border-0 bg-white"></iframe>
+            </object>
+          </div>`;
+      } else if (mimeType.startsWith("text/") || /\.(txt|csv)$/.test(lowName)) {
+        body.innerHTML = `<iframe src="${blobUrl}" class="w-full h-[75vh] rounded-xl border border-slate-300 bg-white"></iframe>`;
       } else {
-        body.innerHTML = `<iframe src="${file.dataUrl}" class="w-full h-[75vh] rounded-xl border border-slate-300 bg-white"></iframe>`;
+        const iconClass = getFileIconClass(fileName, mimeType);
+        const sizeKB = file.size ? `${Math.max(1, Math.round(file.size / 1024))} KB` : "";
+        body.innerHTML = `
+          <div class="bg-white rounded-3xl border border-slate-200 p-8 max-w-md w-full text-center space-y-4 shadow-xs">
+            <div class="w-16 h-16 rounded-2xl bg-sky-50 border border-sky-200 flex items-center justify-center mx-auto text-3xl">
+              <i class="fa-solid ${iconClass}"></i>
+            </div>
+            <div>
+              <h4 class="font-black text-sm text-slate-900 break-words">${escapeHTML(fileName)}</h4>
+              <p class="text-xs text-slate-500 mt-1">${sizeKB ? `Tamaño: ${sizeKB} • ` : ""}Documento adjunto listo para descargar o abrir.</p>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+              <a href="${blobUrl}" download="${escapeHTML(fileName)}" class="px-4 py-2.5 rounded-xl bg-marymount-navy hover:bg-marymount-blue text-white text-xs font-extrabold transition inline-flex items-center gap-1.5">
+                <i class="fa-solid fa-download"></i>
+                <span>Descargar Documento</span>
+              </a>
+              <a href="${blobUrl}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-marymount-navy border border-sky-200 text-xs font-extrabold transition inline-flex items-center gap-1.5">
+                <i class="fa-solid fa-up-right-from-square"></i>
+                <span>Abrir en Nueva Pestaña</span>
+              </a>
+            </div>
+          </div>`;
       }
+
       document.getElementById("modal-resource-viewer")?.classList.remove("hidden");
     }
 
@@ -4541,7 +4980,7 @@
               </button>
             </div>
             <p class="text-xs text-slate-600 whitespace-pre-line">${escapeHTML(act.description || "")}</p>
-            ${renderResourceBadgesHTML("activities", act.id, act.links, [], canEdit)}
+            ${renderResourceBadgesHTML("activities", act.id, act.links, act.attachments || [], canEdit)}
           </article>`;
         })
         .join("");
@@ -4690,7 +5129,8 @@
     }
 
     function renderDraftFiles(prefix) {
-      const listKey = prefix === "mat" ? "matFiles" : "subFiles";
+      const listKey =
+        prefix === "mat" ? "matFiles" : prefix === "act" ? "actFiles" : "subFiles";
       const container = document.getElementById(`${prefix}-draft-files-list`);
       if (!container) return;
       const files = draftState[listKey];
@@ -4715,12 +5155,14 @@
     }
 
     function updateDraftFileName(prefix, idx, val) {
-      const listKey = prefix === "mat" ? "matFiles" : "subFiles";
+      const listKey =
+        prefix === "mat" ? "matFiles" : prefix === "act" ? "actFiles" : "subFiles";
       if (draftState[listKey][idx]) draftState[listKey][idx].name = val;
     }
 
     function removeDraftFile(prefix, idx) {
-      const listKey = prefix === "mat" ? "matFiles" : "subFiles";
+      const listKey =
+        prefix === "mat" ? "matFiles" : prefix === "act" ? "actFiles" : "subFiles";
       draftState[listKey].splice(idx, 1);
       renderDraftFiles(prefix);
     }
@@ -4865,7 +5307,7 @@
     }
 
     // =========================================================================
-    // 14. PESTAÑA AULA 3: ACTIVIDADES Y ENTREGAS
+    // 14. PESTAÑA AULA 3: ACTIVIDADES, ENTREGAS Y CALIFICACIÓN COMPLETA
     // =========================================================================
     function populateActivityLearningIntentions() {
       const gb = ensureClassroomGradebook(classroomState.classroomId);
@@ -4880,7 +5322,7 @@
           : lis.map((li) => `<option value="${li.id}">${escapeHTML(li.title)}</option>`).join("");
     }
 
-    function openNewActivityModal() {
+    function openNewActivityModal(editActId = "") {
       const cls = campusDB.get("classrooms", classroomState.classroomId);
       if (!cls) return;
       const gb = ensureClassroomGradebook(cls.id);
@@ -4888,38 +5330,70 @@
       trimSel.innerHTML = gb.trimesters
         .map((t) => `<option value="${t.id}">${escapeHTML(t.name)}</option>`)
         .join("");
-      trimSel.value = "t1";
-      populateActivityLearningIntentions();
 
-      document.getElementById("edit-activity-id").value = "";
-      document.getElementById("act-title").value = "";
-      document.getElementById("act-due-date").value = "";
-      document.getElementById("act-description").value = "";
-      draftState.actLinks = [];
+      const targetBox = document.getElementById("act-target-classes-box");
+
+      if (editActId) {
+        const act = campusDB.get("activities", editActId);
+        if (!act) return;
+        document.getElementById("modal-activity-heading").textContent = "Editar Actividad Académica";
+        document.getElementById("edit-activity-id").value = act.id;
+        trimSel.value = act.trimesterId || "t1";
+        populateActivityLearningIntentions();
+        if (act.learningIntentionId) document.getElementById("act-li-id").value = act.learningIntentionId;
+        document.getElementById("act-title").value = act.title || "";
+        document.getElementById("act-due-date").value = act.dueDate || "";
+        document.getElementById("act-description").value = act.description || "";
+        draftState.actLinks = (act.links || []).map((l) => ({ label: l.label || "", url: l.url || "" }));
+        draftState.actFiles = (act.attachments || []).map((f) => ({ ...f }));
+        targetBox?.classList.add("hidden");
+      } else {
+        document.getElementById("modal-activity-heading").textContent = "Crear Actividad Académica";
+        document.getElementById("edit-activity-id").value = "";
+        trimSel.value = "t1";
+        populateActivityLearningIntentions();
+        document.getElementById("act-title").value = "";
+        document.getElementById("act-due-date").value = "";
+        document.getElementById("act-description").value = "";
+        draftState.actLinks = [];
+        draftState.actFiles = [];
+        targetBox?.classList.remove("hidden");
+
+        const siblingClasses = campusDB
+          .getAll("classrooms")
+          .filter(
+            (c) =>
+              normalizeEmail(c.teacherEmail) === normalizeEmail(cls.teacherEmail) &&
+              c.subjectId === cls.subjectId &&
+              c.gradeId === cls.gradeId
+          )
+          .sort(compareSectionsOrder);
+        document.getElementById("act-target-classes-list").innerHTML = siblingClasses
+          .map(
+            (c) => `
+            <label class="flex items-center gap-1.5 text-xs font-bold text-slate-700 cursor-pointer">
+              <input type="checkbox" value="${c.id}" class="act-target-cls-chk rounded text-marymount-navy" ${
+              c.id === cls.id ? "checked" : ""
+            } />
+              <span>${escapeHTML(c.sectionName)}</span>
+            </label>`
+          )
+          .join("");
+      }
+
       renderDraftLinks("act");
-
-      const siblingClasses = campusDB
-        .getAll("classrooms")
-        .filter(
-          (c) =>
-            normalizeEmail(c.teacherEmail) === normalizeEmail(cls.teacherEmail) &&
-            c.subjectId === cls.subjectId &&
-            c.gradeId === cls.gradeId
-        )
-        .sort(compareSectionsOrder);
-      document.getElementById("act-target-classes-list").innerHTML = siblingClasses
-        .map(
-          (c) => `
-          <label class="flex items-center gap-1.5 text-xs font-bold text-slate-700 cursor-pointer">
-            <input type="checkbox" value="${c.id}" class="act-target-cls-chk rounded text-marymount-navy" ${
-            c.id === cls.id ? "checked" : ""
-          } />
-            <span>${escapeHTML(c.sectionName)}</span>
-          </label>`
-        )
-        .join("");
-
+      renderDraftFiles("act");
       document.getElementById("modal-new-activity")?.classList.remove("hidden");
+    }
+
+    async function handleActivityFilesSelected() {
+      const input = document.getElementById("act-files-input");
+      const files = Array.from(input?.files || []);
+      for (const f of files) {
+        draftState.actFiles.push(await readFileAsDataURL(f));
+      }
+      if (input) input.value = "";
+      renderDraftFiles("act");
     }
 
     async function deleteActivity(actId) {
@@ -4961,25 +5435,64 @@
       renderDraftFiles("sub");
     }
 
-    async function saveSubmissionFeedback(submissionId) {
-      const sub = campusDB.get("submissions", submissionId);
-      if (!sub) return;
-      const gradeInput = document.getElementById(`sub-grade-${submissionId}`);
-      const fbInput = document.getElementById(`sub-fb-${submissionId}`);
-      const updated = {
-        ...sub,
-        grade: gradeInput?.value ?? "",
-        feedback: fbInput?.value ?? ""
+    async function saveActivityStudentGrade(activityId, studentEmail) {
+      const cls = campusDB.get("classrooms", classroomState.classroomId);
+      const act = campusDB.get("activities", activityId);
+      if (!cls || !act) return;
+
+      const email = normalizeEmail(studentEmail);
+      const safeKey = `${activityId}__${email.replace(/[^a-z0-9]/g, "_")}`;
+      const gradeInput = document.getElementById(`act-grade-${safeKey}`);
+      const fbInput = document.getElementById(`act-fb-${safeKey}`);
+
+      const rawGrade = String(gradeInput?.value ?? "")
+        .trim()
+        .replace(",", ".");
+      let cleanGrade = "";
+      if (rawGrade !== "") {
+        const num = Number(rawGrade);
+        if (Number.isNaN(num) || num < 10 || num > 100) {
+          showToast("Ingresa una nota válida entre 10 y 100", "warning");
+          return;
+        }
+        cleanGrade = String(Math.round(num));
+        if (gradeInput) {
+          gradeInput.value = cleanGrade;
+          applyGradeColorToElement(gradeInput, cleanGrade);
+        }
+      }
+
+      const existing = campusDB
+        .getAll("submissions")
+        .find((s) => s.activityId === activityId && normalizeEmail(s.studentEmail) === email);
+
+      const updatedRecord = {
+        id: existing?.id || generateId("subm"),
+        activityId,
+        classroomId: cls.id,
+        studentEmail: email,
+        text: existing?.text || "",
+        links: existing?.links || [],
+        attachments: existing?.attachments || [],
+        submitted: Boolean(existing?.submitted || existing?.submittedAt),
+        submittedAt: existing?.submittedAt || "",
+        grade: cleanGrade,
+        feedback: String(fbInput?.value ?? "").trim()
       };
-      await campusDB.put("submissions", updated);
-      const act = campusDB.get("activities", sub.activityId);
-      await pushNotification(
-        sub.studentEmail,
-        "Actividad Calificada",
-        `Tu entrega en "${act?.title || "Actividad"}" recibió retroalimentación.`,
-        sub.classroomId
-      );
-      showToast("Retroalimentación guardada", "success");
+
+      await campusDB.put("submissions", updatedRecord);
+
+      if (cleanGrade !== "" || updatedRecord.feedback !== "") {
+        await pushNotification(
+          email,
+          `Calificación en ${cls.subjectName}`,
+          `Tu actividad "${act.title}" tiene nota: ${cleanGrade || "Revisada"}.`,
+          cls.id
+        );
+      }
+
+      renderClassroomActividadesTab();
+      showToast("Calificación de actividad guardada", "success");
     }
 
     function renderClassroomActividadesTab() {
@@ -5010,6 +5523,11 @@
           if (!canEdit) {
             const myEmail = normalizeEmail(sessionState.currentUser?.email);
             const mySub = actSubs.find((s) => normalizeEmail(s.studentEmail) === myEmail);
+            const hasDigitalSubmission = Boolean(
+              mySub && (mySub.submitted || mySub.submittedAt || mySub.text || (mySub.links?.length || 0) > 0 || (mySub.attachments?.length || 0) > 0)
+            );
+            const hasGrade = mySub && mySub.grade !== "" && mySub.grade !== undefined && mySub.grade !== null;
+
             return `
             <div class="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs space-y-3">
               <div class="flex flex-wrap items-start justify-between gap-2">
@@ -5017,20 +5535,36 @@
                   <h4 class="font-black text-sm text-marymount-navy">${escapeHTML(act.title)}</h4>
                   ${act.dueDate ? `<p class="text-[11px] font-bold text-amber-700">Fecha límite: ${escapeHTML(act.dueDate)}</p>` : ""}
                 </div>
-                <button type="button" onclick="window.MMApp.openStudentSubmitModal('${act.id}')" class="px-4 py-2 rounded-xl ${
-              mySub ? "bg-emerald-600 hover:bg-emerald-700" : "bg-marymount-navy hover:bg-marymount-blue"
-            } text-white text-xs font-extrabold transition">
-                  ${mySub ? "Editar Entrega" : "Entregar Actividad"}
-                </button>
+                <div class="flex items-center gap-2">
+                  ${
+                    hasGrade
+                      ? `<span class="px-3.5 py-1.5 rounded-xl bg-sky-50 border border-sky-200 font-mono font-black text-xs ${getGradeColorClass(mySub.grade)}">
+                          Nota: ${escapeHTML(mySub.grade)}
+                        </span>`
+                      : ""
+                  }
+                  <button type="button" onclick="window.MMApp.openStudentSubmitModal('${act.id}')" class="px-4 py-2 rounded-xl ${
+                    hasDigitalSubmission ? "bg-emerald-600 hover:bg-emerald-700" : "bg-marymount-navy hover:bg-marymount-blue"
+                  } text-white text-xs font-extrabold transition">
+                    ${hasDigitalSubmission ? "Editar Entrega" : "Entregar Actividad"}
+                  </button>
+                </div>
               </div>
               <p class="text-xs text-slate-700 whitespace-pre-line">${escapeHTML(act.description || "")}</p>
-              ${renderResourceBadgesHTML("activities", act.id, act.links, [], false)}
+              ${renderResourceBadgesHTML("activities", act.id, act.links, act.attachments || [], false)}
               ${
-                mySub
+                mySub && (hasDigitalSubmission || hasGrade || mySub.feedback)
                   ? `<div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5 text-xs">
                       <div class="flex items-center justify-between">
-                        <span class="font-extrabold text-emerald-900"><i class="fa-solid fa-check-circle mr-1"></i>Entregado</span>
-                        ${mySub.grade !== "" && mySub.grade !== undefined ? `<span class="font-mono font-black ${getGradeColorClass(mySub.grade)}">Nota: ${escapeHTML(mySub.grade)}</span>` : ""}
+                        <span class="font-extrabold text-emerald-900">
+                          <i class="fa-solid ${hasDigitalSubmission ? "fa-check-circle" : "fa-award"} mr-1"></i>
+                          ${hasDigitalSubmission ? "Entrega registrada" : "Evaluada en clase"}
+                        </span>
+                        ${
+                          hasGrade
+                            ? `<span class="font-mono font-black text-sm ${getGradeColorClass(mySub.grade)}">Calificación: ${escapeHTML(mySub.grade)}</span>`
+                            : ""
+                        }
                       </div>
                       ${mySub.text ? `<p class="text-slate-700">${escapeHTML(mySub.text)}</p>` : ""}
                       ${renderResourceBadgesHTML("submissions", mySub.id, mySub.links, mySub.attachments, false)}
@@ -5041,55 +5575,115 @@
             </div>`;
           }
 
+          const digitalSubsCount = actSubs.filter(
+            (s) => s.submitted || s.submittedAt || s.text || (s.links?.length || 0) > 0 || (s.attachments?.length || 0) > 0
+          ).length;
+          const gradedSubs = actSubs.filter(
+            (s) => s.grade !== "" && s.grade !== undefined && s.grade !== null && !Number.isNaN(Number(s.grade))
+          );
+          const actAvg =
+            gradedSubs.length > 0
+              ? (gradedSubs.reduce((acc, s) => acc + Number(s.grade), 0) / gradedSubs.length).toFixed(1)
+              : null;
+
           return `
           <div class="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs space-y-4">
             <div class="flex flex-wrap items-start justify-between gap-2">
               <div>
-                <h4 class="font-black text-sm text-marymount-navy">${escapeHTML(act.title)}</h4>
-                <p class="text-[11px] text-slate-500">${actSubs.length} de ${sectionStudents.length} entregas recibidas${
-            act.dueDate ? ` • Límite: ${escapeHTML(act.dueDate)}` : ""
-          }</p>
+                <div class="flex flex-wrap items-center gap-2">
+                  <h4 class="font-black text-sm text-marymount-navy">${escapeHTML(act.title)}</h4>
+                  <span class="px-2.5 py-0.5 rounded-full bg-sky-50 border border-sky-200 text-marymount-navy text-[10px] font-extrabold">
+                    ${gradedSubs.length}/${sectionStudents.length} calificados
+                  </span>
+                  ${
+                    actAvg !== null
+                      ? `<span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-[10px] font-mono font-black ${getGradeColorClass(actAvg)}">
+                          Prom: ${actAvg}
+                        </span>`
+                      : ""
+                  }
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">${digitalSubsCount} de ${sectionStudents.length} entregas digitales recibidas${
+                  act.dueDate ? ` • Límite: ${escapeHTML(act.dueDate)}` : ""
+                }</p>
               </div>
-              <button type="button" onclick="window.MMApp.deleteActivity('${act.id}')" class="px-3 py-1 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold">
-                Eliminar
-              </button>
+              <div class="flex items-center gap-1.5">
+                <button type="button" onclick="window.MMApp.openNewActivityModal('${act.id}')" class="px-3 py-1 rounded-xl bg-sky-50 hover:bg-sky-100 text-marymount-navy text-xs font-bold">
+                  Editar
+                </button>
+                <button type="button" onclick="window.MMApp.deleteActivity('${act.id}')" class="px-3 py-1 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold">
+                  Eliminar
+                </button>
+              </div>
             </div>
             <p class="text-xs text-slate-700 whitespace-pre-line">${escapeHTML(act.description || "")}</p>
-            ${renderResourceBadgesHTML("activities", act.id, act.links, [], true)}
+            ${renderResourceBadgesHTML("activities", act.id, act.links, act.attachments || [], true)}
 
-            <div class="border-t border-slate-100 pt-3 space-y-2">
-              <h5 class="text-[11px] font-extrabold uppercase text-slate-500">Entregas de Estudiantes</h5>
+            <div class="border-t border-slate-100 pt-3 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <h5 class="text-[11px] font-extrabold uppercase text-slate-500">Calificación y Entregas por Estudiante (Escala 10–100)</h5>
+              </div>
               ${
-                actSubs.length === 0
-                  ? `<p class="text-xs text-slate-400">Aún ningún estudiante ha enviado entrega.</p>`
-                  : actSubs
-                      .map((sub) => {
-                        const stUser = campusDB.get("users", sub.studentEmail);
-                        return `
-                        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
-                          <div class="flex flex-wrap items-center justify-between gap-2">
-                            <span class="font-extrabold text-slate-800">${escapeHTML(
-                              stUser ? formatPersonFirstLast(stUser) : sub.studentEmail
-                            )}</span>
-                            <div class="flex items-center gap-2">
-                              <input id="sub-grade-${sub.id}" type="text" placeholder="Nota" value="${escapeHTML(
-                          sub.grade ?? ""
-                        )}" oninput="window.MMApp.applyGradeColorToElement(this, this.value)" class="w-16 px-2 py-1 rounded-lg border border-slate-300 font-mono font-bold text-center bg-white ${getGradeColorClass(
-                          sub.grade
-                        )}" />
-                              <input id="sub-fb-${sub.id}" type="text" placeholder="Retroalimentación..." value="${escapeHTML(
-                          sub.feedback ?? ""
-                        )}" class="w-48 sm:w-64 px-2.5 py-1 rounded-lg border border-slate-300 bg-white" />
-                              <button type="button" onclick="window.MMApp.saveSubmissionFeedback('${sub.id}')" class="px-3 py-1 rounded-lg bg-marymount-navy text-white font-bold">
-                                Guardar
-                              </button>
+                sectionStudents.length === 0
+                  ? `<p class="text-xs text-slate-400">Aún no hay estudiantes matriculados en este salón.</p>`
+                  : `<div class="space-y-2">
+                      ${sectionStudents
+                        .map((st, idx) => {
+                          const email = normalizeEmail(st.email);
+                          const sub = actSubs.find((s) => normalizeEmail(s.studentEmail) === email);
+                          const safeKey = `${act.id}__${email.replace(/[^a-z0-9]/g, "_")}`;
+                          const hasSubmitted = Boolean(
+                            sub && (sub.submitted || sub.submittedAt || sub.text || (sub.links?.length || 0) > 0 || (sub.attachments?.length || 0) > 0)
+                          );
+                          const gradeVal = sub?.grade ?? "";
+                          const fbVal = sub?.feedback ?? "";
+
+                          return `
+                          <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                              <div class="flex items-center gap-2 min-w-0">
+                                <span class="font-mono text-slate-400">${idx + 1}.</span>
+                                <span class="font-extrabold text-slate-800 truncate">${escapeHTML(formatPersonFirstLast(st))}</span>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
+                                  hasSubmitted
+                                    ? "bg-emerald-100 text-emerald-800"
+                                    : "bg-slate-200 text-slate-600"
+                                }">
+                                  ${hasSubmitted ? "Entregó" : "Sin archivo"}
+                                </span>
+                              </div>
+                              <div class="flex flex-wrap items-center gap-2">
+                                <input
+                                  id="act-grade-${safeKey}"
+                                  type="text"
+                                  inputmode="decimal"
+                                  placeholder="Nota"
+                                  value="${escapeHTML(gradeVal)}"
+                                  oninput="window.MMApp.applyGradeColorToElement(this, this.value)"
+                                  class="w-16 px-2 py-1 rounded-lg border border-slate-300 font-mono font-bold text-center bg-white outline-none focus:border-marymount-sky ${getGradeColorClass(gradeVal)}"
+                                />
+                                <input
+                                  id="act-fb-${safeKey}"
+                                  type="text"
+                                  placeholder="Retroalimentación..."
+                                  value="${escapeHTML(fbVal)}"
+                                  class="w-44 sm:w-60 px-2.5 py-1 rounded-lg border border-slate-300 bg-white outline-none focus:border-marymount-sky"
+                                />
+                                <button
+                                  type="button"
+                                  onclick="window.MMApp.saveActivityStudentGrade('${act.id}', '${escapeHTML(email)}')"
+                                  class="px-3 py-1 rounded-lg bg-marymount-navy hover:bg-marymount-blue text-white font-bold transition"
+                                >
+                                  Guardar
+                                </button>
+                              </div>
                             </div>
-                          </div>
-                          ${sub.text ? `<p class="text-slate-600">${escapeHTML(sub.text)}</p>` : ""}
-                          ${renderResourceBadgesHTML("submissions", sub.id, sub.links, sub.attachments, false)}
-                        </div>`;
-                      })
-                      .join("")
+                            ${sub?.text ? `<p class="text-slate-600 pl-5">${escapeHTML(sub.text)}</p>` : ""}
+                            ${sub ? `<div class="pl-5">${renderResourceBadgesHTML("submissions", sub.id, sub.links, sub.attachments, false)}</div>` : ""}
+                          </div>`;
+                        })
+                        .join("")}
+                    </div>`
               }
             </div>
           </div>`;
@@ -5133,7 +5727,8 @@
                   .filter(
                     (s) =>
                       s.classroomId === cls.id &&
-                      normalizeEmail(s.studentEmail) === normalizeEmail(st.email)
+                      normalizeEmail(s.studentEmail) === normalizeEmail(st.email) &&
+                      (s.submitted || s.submittedAt || s.text || (s.links?.length || 0) > 0 || (s.attachments?.length || 0) > 0)
                   ).length;
                 const gradeInfo = computeStudentClassroomGrades(cls.id, st.email);
                 const avgText = gradeInfo.finalAvg !== null ? gradeInfo.finalAvg.toFixed(2) : "—";
@@ -5241,7 +5836,7 @@
     }
 
     // =========================================================================
-    // 16. PESTAÑA AULA 5: SÁBANA DE NOTAS (GRADEBOOK)
+    // 16. PESTAÑA AULA 5: SÁBANA DE NOTAS (GRADEBOOK) + PEGADO MASIVO EXCEL
     // =========================================================================
     function ensureClassroomGradebook(classroomId) {
       let gb = campusDB.get("gradebooks", classroomId);
@@ -5399,6 +5994,80 @@
         await campusDB.put("gradebooks", gb, { silent: true });
         campusDB.broadcastChange();
         refreshGradebookComputedCellsOnly();
+      }
+    }
+
+    async function handleGradebookCellPaste(event, startRow, startCol) {
+      const clipboard = event.clipboardData || window.clipboardData;
+      const pastedText = clipboard?.getData("text") || "";
+      if (!pastedText) return;
+
+      const normalizedText = pastedText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+      const hasMultipleCells = normalizedText.includes("\n") || normalizedText.includes("\t");
+      if (!hasMultipleCells) return;
+
+      event.preventDefault();
+
+      const lines = normalizedText.split("\n");
+      if (lines.length > 1 && lines[lines.length - 1].trim() === "") {
+        lines.pop();
+      }
+
+      const gb = ensureClassroomGradebook(classroomState.classroomId);
+      let appliedCount = 0;
+      let skippedCount = 0;
+
+      lines.forEach((line, rOffset) => {
+        const cols = line.split("\t");
+        cols.forEach((rawCell, cOffset) => {
+          const targetInput = document.querySelector(
+            `input.gb-score-input[data-row="${startRow + rOffset}"][data-col="${startCol + cOffset}"]`
+          );
+          if (!targetInput) return;
+
+          const email = normalizeEmail(targetInput.getAttribute("data-email"));
+          const colKey = targetInput.getAttribute("data-col-key");
+          if (!email || !colKey) return;
+          if (!gb.scores[email]) gb.scores[email] = {};
+
+          const cleaned = String(rawCell ?? "")
+            .trim()
+            .replace(",", ".");
+
+          if (cleaned === "" || cleaned === "-" || cleaned === "—") {
+            targetInput.value = "";
+            applyGradeColorToElement(targetInput, "");
+            delete gb.scores[email][colKey];
+            appliedCount++;
+            return;
+          }
+
+          const num = Number(cleaned);
+          if (Number.isNaN(num) || num < 10 || num > 100) {
+            skippedCount++;
+            return;
+          }
+
+          const rounded = Math.round(num);
+          targetInput.value = String(rounded);
+          applyGradeColorToElement(targetInput, rounded);
+          gb.scores[email][colKey] = rounded;
+          appliedCount++;
+        });
+      });
+
+      if (appliedCount > 0) {
+        await campusDB.put("gradebooks", gb, { silent: true });
+        campusDB.broadcastChange();
+        refreshGradebookComputedCellsOnly();
+        showToast(
+          skippedCount > 0
+            ? `Se pegaron ${appliedCount} nota(s) (${skippedCount} fuera de rango 10–100)`
+            : `Se pegaron ${appliedCount} calificación(es)`,
+          "success"
+        );
+      } else if (skippedCount > 0) {
+        showToast("Las notas pegadas deben estar entre 10 y 100", "warning");
       }
     }
 
@@ -5726,36 +6395,6 @@
           ? "text-xs"
           : "text-[11px]";
 
-      const editableCols = [];
-      trimesters.forEach((trim) => {
-        trim.learningIntentions.forEach((li) => {
-          (li.evaluations || []).forEach((ev) => {
-            editableCols.push({
-              key: `${trim.id}__${li.id}__${ev.id}`,
-              trimId: trim.id,
-              liId: li.id,
-              evalId: ev.id,
-              label: ev.name,
-              kind: "exam"
-            });
-          });
-        });
-        editableCols.push({
-          key: `${trim.id}__disp`,
-          trimId: trim.id,
-          label: `Disp (${gb.weights?.disposition ?? 10}%)`,
-          kind: "disp"
-        });
-        if (isType2) {
-          editableCols.push({
-            key: `${trim.id}__trim`,
-            trimId: trim.id,
-            label: `Trimestral (${gb.weights?.trimesterExam ?? 25}%)`,
-            kind: "trim"
-          });
-        }
-      });
-
       // Fila 1: Trimestres
       let row1HTML = `<th rowspan="3" class="gb-sticky-corner-left bg-marymount-navy text-white px-3 py-2 text-left text-xs font-black min-w-[210px] border-r border-b border-sky-800">Estudiante (Apellido Nombre)</th>`;
       trimesters.forEach((trim) => {
@@ -5764,7 +6403,7 @@
           0
         );
         const evalColSpan = trim.learningIntentions.length === 0 ? 1 : evalCount;
-        const extraCols = 1 + (isType2 ? 1 : 0) + 1; // Disp + [Trim] + Prom Trim
+        const extraCols = 1 + (isType2 ? 1 : 0) + 1;
         const span = evalColSpan + extraCols;
         row1HTML += `<th colspan="${span}" class="gb-sticky-row-1 bg-marymount-navy text-sky-200 text-center text-xs font-black uppercase tracking-wider border-r border-b border-sky-800 px-2">${escapeHTML(
           trim.name
@@ -5865,7 +6504,10 @@
                                   value="${escapeHTML(val)}"
                                   data-row="${rowIdx}"
                                   data-col="${cIdx}"
+                                  data-email="${escapeHTML(email)}"
+                                  data-col-key="${colKey}"
                                   oninput="window.MMApp.applyGradeColorToElement(this, this.value)"
+                                  onpaste="window.MMApp.handleGradebookCellPaste(event, ${rowIdx}, ${cIdx})"
                                   onblur="window.MMApp.onGradebookScoreCellBlur('${escapeHTML(email)}', '${colKey}', this)"
                                   onkeydown="window.MMApp.handleGradebookCellKeydown(event, ${rowIdx}, ${cIdx})"
                                   class="gb-score-input w-14 py-1 rounded-lg border border-transparent hover:border-slate-300 focus:border-marymount-sky focus:bg-sky-50/40 text-center font-mono text-xs font-bold ${getGradeColorClass(
@@ -5892,7 +6534,10 @@
                             value="${escapeHTML(dispVal)}"
                             data-row="${rowIdx}"
                             data-col="${dCol}"
+                            data-email="${escapeHTML(email)}"
+                            data-col-key="${dispKey}"
                             oninput="window.MMApp.applyGradeColorToElement(this, this.value)"
+                            onpaste="window.MMApp.handleGradebookCellPaste(event, ${rowIdx}, ${dCol})"
                             onblur="window.MMApp.onGradebookScoreCellBlur('${escapeHTML(email)}', '${dispKey}', this)"
                             onkeydown="window.MMApp.handleGradebookCellKeydown(event, ${rowIdx}, ${dCol})"
                             class="gb-score-input w-14 py-1 rounded-lg border border-transparent hover:border-amber-300 focus:border-amber-500 focus:bg-white text-center font-mono text-xs font-bold ${getGradeColorClass(
@@ -5917,7 +6562,10 @@
                               value="${escapeHTML(trimVal)}"
                               data-row="${rowIdx}"
                               data-col="${tCol}"
+                              data-email="${escapeHTML(email)}"
+                              data-col-key="${trimKey}"
                               oninput="window.MMApp.applyGradeColorToElement(this, this.value)"
+                              onpaste="window.MMApp.handleGradebookCellPaste(event, ${rowIdx}, ${tCol})"
                               onblur="window.MMApp.onGradebookScoreCellBlur('${escapeHTML(email)}', '${trimKey}', this)"
                               onkeydown="window.MMApp.handleGradebookCellKeydown(event, ${rowIdx}, ${tCol})"
                               class="gb-score-input w-14 py-1 rounded-lg border border-transparent hover:border-indigo-300 focus:border-indigo-500 focus:bg-white text-center font-mono text-xs font-bold ${getGradeColorClass(
@@ -6299,7 +6947,6 @@
               lastName = prefix.slice(1).join(" ") || "Marymount";
             }
           } else {
-            // Formato para estudiantes: Apellidos, nombres, correo institucional
             if (nameParts.length >= 2) {
               lastName = nameParts[0];
               firstName = nameParts.slice(1).join(" ");
@@ -6561,9 +7208,10 @@
         showToast("Material guardado", "success");
       });
 
-      // Publicar Nueva Actividad
+      // Publicar o Editar Actividad
       document.getElementById("form-new-activity")?.addEventListener("submit", async (e) => {
         e.preventDefault();
+        const editActId = document.getElementById("edit-activity-id").value;
         const trimesterId = document.getElementById("act-trimester-id").value;
         const learningIntentionId = document.getElementById("act-li-id").value;
         const title = document.getElementById("act-title").value.trim();
@@ -6572,6 +7220,28 @@
         const links = draftState.actLinks
           .filter((l) => l.url && l.url.trim())
           .map((l) => ({ label: l.label.trim() || l.url.trim(), url: l.url.trim() }));
+        const attachments = [...draftState.actFiles];
+
+        if (editActId) {
+          const existing = campusDB.get("activities", editActId);
+          if (existing) {
+            await campusDB.put("activities", {
+              ...existing,
+              trimesterId,
+              learningIntentionId,
+              title,
+              dueDate,
+              description,
+              links,
+              attachments
+            });
+          }
+          document.getElementById("modal-new-activity")?.classList.add("hidden");
+          renderClassroomActividadesTab();
+          renderClassroomNovedadesTab();
+          showToast("Actividad actualizada", "success");
+          return;
+        }
 
         let targetIds = Array.from(document.querySelectorAll(".act-target-cls-chk:checked")).map(
           (el) => el.value
@@ -6588,6 +7258,7 @@
           dueDate,
           description,
           links,
+          attachments,
           createdAt: now
         }));
 
@@ -6646,6 +7317,7 @@
           text: document.getElementById("submit-text-input").value.trim(),
           links,
           attachments,
+          submitted: true,
           grade: existing?.grade ?? "",
           feedback: existing?.feedback ?? "",
           submittedAt: new Date().toISOString()
@@ -6759,6 +7431,8 @@
       updateDraftLinkField,
       previewAnnouncementFiles,
       openResourceViewer,
+      closeResourceViewer,
+      downloadStoredAttachment,
       openRenameResourceModal,
       openEditAnnouncementModal,
       addEditAnnouncementLinkRow,
@@ -6780,10 +7454,11 @@
       renderClassroomContenidosTab,
       populateActivityLearningIntentions,
       openNewActivityModal,
+      handleActivityFilesSelected,
       deleteActivity,
       openStudentSubmitModal,
       handleSubmissionFilesSelected,
-      saveSubmissionFeedback,
+      saveActivityStudentGrade,
       renderClassroomStudentsTab,
       openStudentDossierModal,
       addStudentObservation,
@@ -6793,6 +7468,7 @@
       removeEvaluationColumn,
       renameEvaluationColumn,
       onGradebookScoreCellBlur,
+      handleGradebookCellPaste,
       handleGradebookCellKeydown,
       openGradebookWeightsModal,
       onGradebookWeightTypePreset,
@@ -6803,18 +7479,25 @@
     // Inicialización al cargar
     window.addEventListener("DOMContentLoaded", async () => {
       try {
+        await campusDB.openIDB();
+        await campusDB.reloadAllFromIDB();
+        await campusDB.initCloudSync();
         await campusDB.ensureSeeded();
         bindFormListeners();
         applyTranslations();
 
         campusDB.subscribe(() => {
           refreshNotificationsUI();
-          if (!sessionState.currentRole) return;
+          if (!sessionState.currentRole) {
+            handleLoginEmailTyping();
+            return;
+          }
           if (classroomState.classroomId) {
             if (classroomState.activeTab === "novedades") renderClassroomNovedadesTab();
             else if (classroomState.activeTab === "contenidos") renderClassroomContenidosTab();
             else if (classroomState.activeTab === "actividades") renderClassroomActividadesTab();
             else if (classroomState.activeTab === "estudiantes") renderClassroomStudentsTab();
+            else if (classroomState.activeTab === "notas") renderClassroomNotasTab();
           } else if (sessionState.currentRole === "admin") {
             renderAdminDashboard();
           } else if (sessionState.currentRole === "leader") {
