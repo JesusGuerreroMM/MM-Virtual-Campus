@@ -2105,7 +2105,7 @@
 
         const labels = {
           connecting: customText || "Conectando nube...",
-          connected: customText || "Sincronizado",
+          connected: customText || "Sincronizado en la nube",
           local: customText || "Modo local"
         };
 
@@ -2239,12 +2239,10 @@
           messagingSenderId: "175444581075",
           appId: "1:175444581075:web:099a2e0d38fc566fa31226"
         };
-        }
 
         try {
           this.updateSyncStatusUI("connecting");
-          const parsedConfig = typeof rawConfig === "string" ? JSON.parse(rawConfig) : rawConfig;
-          this.cloudApp = initializeApp(parsedConfig);
+          this.cloudApp = initializeApp(firebaseConfig);
           this.cloudAuth = getAuth(this.cloudApp);
           this.cloudDb = getFirestore(this.cloudApp);
 
@@ -2261,7 +2259,6 @@
           }
 
           this.cloudReady = true;
-
           // Respaldo de registros locales previos por si la nube aún está vacía
           const preCloudSnapshots = {};
           CLOUD_STORES.forEach((s) => {
